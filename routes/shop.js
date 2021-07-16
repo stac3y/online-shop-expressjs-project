@@ -5,9 +5,10 @@ const express = require('express');
 const rootDirectory = require('../util/path');
 
 const router = express.Router();
+const adminData = require('./admin');
 
 router.get('/', (req, res) => {
-    console.log('In the home middleware!');
+    console.log(adminData.products)
     res.sendFile(path.join(rootDirectory, 'views', 'shop.html'));
 });
 
