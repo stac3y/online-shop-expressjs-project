@@ -1,21 +1,12 @@
-<!DOCTYPE html>
-html(lang="en")
-    head
-        meta(charset="UTF-8")
-        title #{docTitle}
-        link(rel="stylesheet" href="/css/main.css")
-        link(rel="stylesheet" href="/css/forms.css")
-    body
-        header.main-header
-            nav.main-header__nav
-                ul.main-header__item-list
-                    li.main-header__item
-                        a(href="/") Shop
-                    li.main-header__item
-                        a.active(href="/admin/add-product") Add product
+extends layouts/main-layout
+
+block styles
+    link(rel="stylesheet" href="/css/forms.css")
+
+block content
     main
         form.form-product(action="/admin/add-product", method="post")
             .form-control
                 label(for="title") Title
-                input(type="text", name="title", id="title")
+                input(type="text", name="title")#title
             button(type="submit") Add product
