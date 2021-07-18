@@ -1,22 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{docTitle}}</title>
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/product.css">
-</head>
-<body>
-<header class="main-header">
-    <nav class="main-header__nav">
-        <ul class="main-header__item-list">
-            <li class="main-header__item"><a class="active" href="/">Shop</a></li>
-            <li class="main-header__item"><a href="/admin/add-product">Add product</a></li>
-        </ul>
-    </nav>
-</header>
-<main>
-    {{#if hasProducts}}
+{{#if hasProducts}}
     <div class="grid">
         {{#each prods}}
             <article class="card product-item">
@@ -37,10 +19,6 @@
             </article>
         {{/each}}
     </div>
-    {{else}}
-        <h1>No products yet</h1>
-    {{/if}}
-
-</main>
-</body>
-</html>
+{{else}}
+    <h1>No products yet</h1>
+{{/if}}
