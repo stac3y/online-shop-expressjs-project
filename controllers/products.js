@@ -17,8 +17,8 @@ exports.getProducts = (req, res) => {
     Product.fetchAll(products => {
         res.render('shop/product-list', {
             prods: products,
-            docTitle: 'Shop',
-            path: '/'
+            docTitle: 'Products',
+            path: '/products'
         });
     });
 }
