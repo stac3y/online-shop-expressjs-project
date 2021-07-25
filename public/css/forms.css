@@ -7,14 +7,23 @@
     margin: 1rem 0;
 }
 .form-control label,
-.form-control input{
+.form-control input,
+.form-control textarea{
     display: block;
     width: 100%;
 }
-.form-control input{
+.form-control textarea{
+    resize: none;
+}
+.form-control input,
+.form-control textarea{
     border: 1px solid #f304bf;
     font: inherit;
     border-radius: 2px;
+}
+.form-control input:focus,
+.form-control textarea:focus{
+    outline-color: crimson;
 }
 button{
     font: inherit;
