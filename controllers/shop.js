@@ -13,6 +13,7 @@ exports.getProducts = (req, res) => {
 exports.getIndex = (req, res, next) => {
     Product.fetchAll(products => {
         res.render('shop/index', {
+            prods: products,
             docTitle: 'Shop',
             path: '/'
         })
