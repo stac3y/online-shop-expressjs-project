@@ -2,7 +2,14 @@
 <link rel="stylesheet" href="/css/product.css">
 <%- include('../includes/navigation.ejs') %>
 <main>
-    <h1>Cart page</h1>
-    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+    <%if (products.length > 0) {%>
+        <ul>
+            <%products.forEach(p => {%>
+                <li><%= p.productData.title%> (<%= p.qty%>)</li>
+            <%})%>
+        </ul>
+    <%} else {%>
+        <h1>No Products in Cart!</h1>
+    <%}%>
 </main>
 <%- include('../includes/end.ejs') %>
