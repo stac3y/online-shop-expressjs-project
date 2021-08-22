@@ -1,11 +1,9 @@
-const mysql = require('mysql2');
-require('custom-env').env('staging')
+const Sequelize = require('sequelize');
+require('custom-env').env('staging');
 
-pool = mysql.createPool({
-    host: 'localhost',
-    database: 'express-online-shop',
-    user: 'root',
-    password: process.env.MYSQL_PASSWORD
+const sequelize = new Sequelize('express-online-shop', 'root', process.env.MYSQL_PASSWORD, {
+    dialect: 'mysql',
+    host: 'localhost'
 });
 
-module.exports = pool.promise();
+module.exports = sequelize;
