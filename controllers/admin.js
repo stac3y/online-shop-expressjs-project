@@ -30,12 +30,13 @@ exports.getEditProduct = (req, res, next) => {
     const editMode = req.query.edit;
     const productId = req.params.productId;
 
-    if (!editMode){
+    if (!editMode) {
         return res.redirect('/');
     }
 
-    Product.findById(productId, product =>{
-        if (!product){
+    Product.findByPk(productId)
+        .then(product => {
+        if (!product) {
             return res.redirect('/');
         }
 
@@ -46,6 +47,9 @@ exports.getEditProduct = (req, res, next) => {
             product: product
         });
     })
+        .catch(err => {
+            console.log(err);
+        })
 }
 
 exports.postEditProduct = (req, res, next) => {
@@ -56,20 +60,32 @@ exports.postEditProduct = (req, res, next) => {
     const updatedDescription = req.body.description;
     const updatedPrice = req.body.price;
 
-    const updatedProduct = new Product(productId, updatedTitle, updatedImageUrl, updatedDescription, updatedPrice);
-    updatedProduct.save();
-    res.redirect('/admin/products');
+    Product.findByPk(productId)
+        .then(product => {
+            product.title = updatedTitle;
+            product.imageUrl = updatedImageUrl;
+            product.description = updatedDescription;
+            product.price = updatedPrice;
+            return product.save();
+        })
+        .then(result => {
+            console.log('Updated product!');
+            res.redirect('/admin/products');
+        })
+        .catch(err => {
+            console.log(err);
+        });
 }
 
 exports.getProducts = (req, res, next) => {
     Product.findAll()
         .then(products => {
-        res.render('admin/products', {
-            prods: products,
-            docTitle: 'Admin Products',
-            path: '/admin/products'
-        });
-    })
+            res.render('admin/products', {
+                prods: products,
+                docTitle: 'Admin Products',
+                path: '/admin/products'
+            });
+        })
         .catch(err => {
             console.log(err)
         })
