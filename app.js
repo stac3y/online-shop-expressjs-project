@@ -4,10 +4,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const errorController = require('./controllers/error');
-const sequelize = require('./util/database')
+const sequelize = require('./util/database');
+const Product = require('./models/product');
+const User = require('./models/user');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const {use} = require("express/lib/router");
 
 const app = express();
 
@@ -22,7 +25,10 @@ app.use(shopRoutes);
 
 app.use(errorController.getError);
 
-sequelize.sync()
+Product.belongsTo(User, {constraints: true, onDelete: 'CASCADE'});
+User.hasMany(Product);
+
+sequelize.sync({force: true})
     .then(result => {
         // console.log(result);
     })
