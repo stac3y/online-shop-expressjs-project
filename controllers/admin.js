@@ -8,11 +8,11 @@ exports.postAddProduct = (req, res) => {
 
     req.user
         .createProduct({
-        title: title,
-        imageUrl: imageUrl,
-        price: price,
-        description: description
-    }).then(result => {
+            title: title,
+            imageUrl: imageUrl,
+            price: price,
+            description: description
+        }).then(result => {
         console.log('Product created!');
         res.redirect('/admin/products');
     }).catch(err => {
@@ -36,8 +36,11 @@ exports.getEditProduct = (req, res, next) => {
         return res.redirect('/');
     }
 
-    Product.findByPk(productId)
-        .then(product => {
+    // Product.findByPk(productId)
+    req.user
+        .getProducts({where: {id: productId}})
+        .then(products => {
+            const product = products[0];
             if (!product) {
                 return res.redirect('/');
             }
@@ -80,7 +83,8 @@ exports.postEditProduct = (req, res, next) => {
 }
 
 exports.getProducts = (req, res, next) => {
-    Product.findAll()
+    req.user
+        .getProducts()
         .then(products => {
             res.render('admin/products', {
                 prods: products,
