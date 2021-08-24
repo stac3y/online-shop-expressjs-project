@@ -9,6 +9,8 @@ const Product = require('./models/product');
 const User = require('./models/user');
 const Cart = require('./models/cart');
 const CartItem = require('./models/cart-item');
+const Order = require('./models/order');
+const OrderItem = require('./models/order-item');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -50,6 +52,14 @@ Cart.belongsTo(User);
 Cart.belongsToMany(Product, {through: CartItem});
 Product.belongsToMany(Cart, {through: CartItem});
 
+//User => Order (one-to-many)
+User.hasMany(Order);
+Order.belongsTo(User);
+
+//Order => Product (many-to-many)
+Order.belongsToMany(Product, {through: OrderItem});
+Product.belongsToMany(Order, {through: OrderItem});
+
 // sequelize.sync({force: true})
 sequelize.sync()
     .then(result => {
@@ -64,10 +74,7 @@ sequelize.sync()
     })
     .then(user => {
         console.log(user.cart);
-        // if (!user.cart){
-        //     return user.createCart();
-        // }
-        // else return user.cart;
+            // return user.createCart();
     })
     .then(cart=>{
         app.listen(3000);
