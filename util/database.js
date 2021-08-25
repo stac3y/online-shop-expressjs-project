@@ -1,9 +1,14 @@
-const Sequelize = require('sequelize');
 require('custom-env').env('staging');
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
 
-const sequelize = new Sequelize('express-online-shop', 'root', process.env.MYSQL_PASSWORD, {
-    dialect: 'mysql',
-    host: 'localhost'
-});
+const mongoConnect = (callback) => {
+    MongoClient.connect(`mongodb+srv://stacy:${process.env.MONGODB_PASSWORD}@cluster0.3frzt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`)
+        .then(client => {
+            console.log('Connected!');
+            callback(client);
+        })
+        .catch(err => console.log(err));
+}
 
-module.exports = sequelize;
+module.exports = mongoConnect;
