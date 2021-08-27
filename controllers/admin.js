@@ -8,10 +8,10 @@ exports.postAddProduct = (req, res) => {
 
     const product = new Product(title, price, description, imageUrl);
     product.save()
-    .then(result => {
-        console.log('Product created!');
-        res.redirect('/admin/products');
-    }).catch(err => {
+        .then(result => {
+            console.log('Product created!');
+            res.redirect('/admin/products');
+        }).catch(err => {
         console.log(err);
     });
 }
@@ -79,18 +79,19 @@ exports.postEditProduct = (req, res, next) => {
 }
 
 exports.getProducts = (req, res, next) => {
-    // req.user
-    //     .getProducts()
-    //     .then(products => {
-    //         res.render('admin/products', {
-    //             prods: products,
-    //             docTitle: 'Admin Products',
-    //             path: '/admin/products'
-    //         });
-    //     })
-    //     .catch(err => {
-    //         console.log(err)
-    //     })
+    Product.fetchAll()
+        .then(
+            products => {
+                res.render('admin/products', {
+                    prods: products,
+                    docTitle: 'Admin Products',
+                    path: '/admin/products'
+                });
+            }
+        )
+        .catch(err => {
+            console.log(err);
+        });
 }
 
 exports.postDeleteProduct = (req, res, next) => {
