@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const {Double} = require("mongodb");
 
 const Schema = mongoose.Schema;
 
@@ -21,6 +20,8 @@ const productSchema = new Schema({
         required: true
     }
 })
+
+module.exports = mongoose.model('Product', productSchema);
 
 
 // const {ObjectId} = require("mongodb");
