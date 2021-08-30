@@ -1,10 +1,11 @@
 const path = require('path');
+require('custom-env').env('staging');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const errorController = require('./controllers/error');
-const mongoConnect = require('./util/database').mongoConnect;
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -25,8 +26,8 @@ app.use((req, res, next) => {
             next();
         })
         .catch(err => {
-        console.log(err);
-    });
+            console.log(err);
+        });
 });
 
 app.use('/admin', adminRoutes);
@@ -34,6 +35,9 @@ app.use(shopRoutes);
 
 app.use(errorController.getError);
 
-mongoConnect(() => {
-    app.listen(3000);
-})
+mongoose.connect(`mongodb+srv://stacy:${process.env.MONGODB_PASSWORD}@cluster0.3frzt.mongodb.net/shop?retryWrites=true&w=majority`)
+    .then(result => {
+        app.listen(3000);
+    })
+    .catch(err => console.log(err));
+
