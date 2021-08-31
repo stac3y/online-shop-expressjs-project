@@ -32,8 +32,7 @@ userSchema.methods.addToCart = function (product) {
     } else {
         updatedCartItems.push({productId: product._id, quantity: newQuantity});
     }
-    const updatedCart = {items: updatedCartItems};
-    this.cart = updatedCart;
+    this.cart = {items: updatedCartItems};
     return this.save();
 }
 
