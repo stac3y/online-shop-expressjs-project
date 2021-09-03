@@ -47,21 +47,22 @@ userSchema.methods.deleteCartProduct = function (productId) {
     return this.save();
 }
 
-userSchema.methods.addOrder = function () {
-    this
-        .populate('cart.items.productId')
-        .then(user => {
-            const products = user.cart.items;
-            const order = new Order ({
-                items: products,
-                user: {
-                    _id: this._id
-                }
-            });
-
-            return order.save();
-        })
-}
+// userSchema.methods.addOrder = function () {
+//     this
+//         .populate('cart.items.productId')
+//         .then(user => {
+//             const products = user.cart.items;
+//             const order = new Order ({
+//                 items: products,
+//                 user: {
+//                     userId: this._id,
+//                     name: this.name
+//                 }
+//             });
+//
+//             return order.save();
+//         })
+// }
 
 
 module.exports = mongoose.model('User', userSchema);
