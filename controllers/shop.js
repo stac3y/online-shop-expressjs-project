@@ -93,7 +93,7 @@ exports.postOrder = (req, res, next) => {
             const products = user.cart.items.map(i => {
                 return {
                     quantity: i.quantity,
-                    product: i.productId
+                    product: {...i.productId._doc}
                 }
             });
             const order = new Order({
@@ -112,8 +112,8 @@ exports.postOrder = (req, res, next) => {
 }
 
 exports.getOrders = (req, res, next) => {
-    req.user
-        .getOrders()
+    Order.find({'user.userId': req.user._id})
+        .populate('products.product')
         .then(orders => {
             res.render('shop/orders', {
                 docTitle: 'Your Orders',
