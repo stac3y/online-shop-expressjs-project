@@ -12,7 +12,8 @@
 .orders__item {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
     padding: 1rem;
-    margin-bottom: 1rem;
+    margin:  1rem auto;
+    width: 80%;
 }
 
 .orders__products {
@@ -26,4 +27,6 @@
     padding: 0.5rem;
     border: 1px solid #f304bf;
     color: #f304bf;
+    display: flex;
+    justify-content: space-between;
 }

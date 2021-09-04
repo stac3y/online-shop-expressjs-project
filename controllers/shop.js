@@ -93,15 +93,21 @@ exports.postOrder = (req, res, next) => {
             const products = user.cart.items.map(i => {
                 return {
                     quantity: i.quantity,
-                    product: {...i.productId._doc}
+                    product: {...i.productId._doc},
+                    subtotal: i.quantity * i.productId.price
                 }
+            });
+            let total = 0;
+            products.forEach(p => {
+               total += p.subtotal;
             });
             const order = new Order({
                 user: {
                     name: req.user.name,
                     userId: req.user._id
                 },
-                products: products
+                products: products,
+                total: total
             })
             return order.save();
         })
@@ -116,8 +122,8 @@ exports.postOrder = (req, res, next) => {
 
 exports.getOrders = (req, res, next) => {
     Order.find({'user.userId': req.user._id})
-        .populate('products.product')
         .then(orders => {
+            console.log(orders);
             res.render('shop/orders', {
                 docTitle: 'Your Orders',
                 path: '/orders',
