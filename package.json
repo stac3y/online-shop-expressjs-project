@@ -20,6 +20,7 @@
     "pug": "^3.0.2"
   },
   "devDependencies": {
+    "express-session": "^1.17.2",
     "mongodb": "^4.1.1",
     "mysql2": "^2.3.0",
     "sequelize": "^6.6.5"
