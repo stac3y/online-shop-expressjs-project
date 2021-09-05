@@ -52,6 +52,13 @@ form {
     padding: 0;
 }
 
+.main-header__item button{
+    border: none;
+    outline: none;
+    color: white;
+    background-color: transparent;
+}
+
 .main-header__item a {
     text-decoration: none;
     color: white;
