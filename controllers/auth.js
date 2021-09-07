@@ -11,14 +11,29 @@ exports.getLogin = (req, res, next) => {
 }
 
 exports.postLogin = (req, res, next) => {
-    User.findById("612e37bfbcff225981d3e913")
+    const email = req.body.email;
+    const password = req.body.password;
+    User.findOne({email: email})
         .then(user => {
-            req.session.user = user;
-            req.session.isLoggedIn = true;
-            req.session.save((err) => {
-                console.log(err);
-                res.redirect('/');
-            });
+            if (!user){
+                return res.redirect('/login');
+            }
+            bcrypt.compare(password, user.password)
+                .then(isCompare => {
+                    if (!isCompare){
+                        return res.redirect('/login');
+                    }
+                    req.session.user = user;
+                    req.session.isLoggedIn = true;
+                    return req.session.save((err) => {
+                        console.log(err);
+                        res.redirect('/');
+                    });
+                })
+                .catch(err =>{
+                    console.log(err);
+                    res.redirect('/login');
+                });
         })
         .catch(err => {
             console.log(err);
@@ -44,20 +59,19 @@ exports.postSignup = (req, res, next) => {
             if (userDoc) {
                 return res.redirect('/signup');
             }
-            return bcrypt.hash(password, 12);
+            return bcrypt.hash(password, 12).then(hashedPassword => {
+                const user = new User({
+                    email: email,
+                    password: hashedPassword,
+                    cart: {items: []}
+                });
+                return user.save();
+            })
+                .then(result => {
+                    res.redirect('/login');
+                });
+        })
 
-        })
-        .then(hashedPassword => {
-            const user = new User({
-                email: email,
-                password: hashedPassword,
-                cart: {items: []}
-            });
-            return user.save();
-        })
-        .then(result => {
-            res.redirect('/login');
-        })
         .catch(err => console.log(err));
 
 }
