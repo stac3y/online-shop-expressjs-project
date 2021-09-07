@@ -17,6 +17,9 @@ exports.postAddProduct = (req, res) => {
 }
 
 exports.getAddProduct = (req, res) => {
+    if (!req.session.isLoggedIn) {
+        return res.redirect('/login');
+    }
     res.render('admin/edit-product', {
         docTitle: 'Add product',
         path: '/admin/add-product',
