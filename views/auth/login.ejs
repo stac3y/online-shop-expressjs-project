@@ -4,7 +4,10 @@
 <%- include('../includes/navigation.ejs') %>
 <main>
     <% if (errorMessage) { %>
-    <div><%= errorMessage %></div>
+        <div class="user-message user-message__error"><%= errorMessage %></div>
+    <% } %>
+    <% if (successMessage) { %>
+        <div class="user-message"><%= successMessage %></div>
     <% } %>
     <form class="login-form" action="/login" method="post">
         <div class="form-control">
