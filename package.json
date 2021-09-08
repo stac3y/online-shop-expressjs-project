@@ -22,6 +22,7 @@
     "pug": "^3.0.2"
   },
   "devDependencies": {
+    "csurf": "^1.11.0",
     "express-session": "^1.17.2",
     "mongodb": "^4.1.1",
     "mysql2": "^2.3.0",
