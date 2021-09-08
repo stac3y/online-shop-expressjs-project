@@ -11,7 +11,7 @@ const orderSchema = new Schema({
     total: {type: Number, required: true},
     user: {
         userId: {type: Schema.Types.ObjectId, required: true, ref: 'User'},
-        name: {type: String, required: true}
+        email: {type: String, required: true}
     }
 
 });
