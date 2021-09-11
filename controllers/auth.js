@@ -114,6 +114,9 @@ exports.postSignup = (req, res, next) => {
                         html: '<h1>You successfully signed up!</h1>'
                     });
                 })
+                .then(result => {
+                    console.log(result);
+                })
                 .catch(err => console.log(err));
         })
 

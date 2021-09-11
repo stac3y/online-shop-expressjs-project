@@ -8,8 +8,6 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
-const nodemailer = require('nodemailer');
-
 
 const errorController = require('./controllers/error');
 
@@ -20,15 +18,6 @@ const authRoutes = require('./routes/auth');
 const User = require('./models/user');
 
 const MONGODB_URI = `mongodb+srv://stacy:${process.env.MONGODB_PASSWORD}@cluster0.3frzt.mongodb.net/shop?w=majority`;
-
-const transporter = nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
-    auth: {
-        user: process.env.MAILTRAP_USER,
-        pass: process.env.MAILTRAP_PASSWORD
-    }
-});
 
 const app = express();
 const store = new MongoDBStore({
@@ -81,12 +70,6 @@ app.use(errorController.getError);
 mongoose.connect(MONGODB_URI)
     .then(result => {
         app.listen(3000);
-        transporter.sendMail({
-            to: 'stacy.starina@gmail.com',
-            from: 'shop@node-complete.com',
-            subject: 'Signup succeed!',
-            html: '<h1>You successfully signed up!</h1>'
-        });
     })
     .catch(err => console.log(err));
 
