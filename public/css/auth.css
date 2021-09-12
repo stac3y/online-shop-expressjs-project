@@ -1,6 +1,17 @@
-.login-form{
+.login-form {
     width: 20rem;
     max-width: 90%;
     margin: auto;
     display: block;
+}
+
+.reset-link,
+/*.reset-link:hover,*/
+.reset-link:active {
+    /*text-decoration: none;*/
+    color: #f304bf;
+}
+
+.reset-link:hover {
+    color: #f3cb04;
 }
