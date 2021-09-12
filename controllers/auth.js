@@ -184,6 +184,10 @@ exports.getNewPassword = (req, res, next) => {
     const token = req.params.token;
     User.findOne({resetToken: token, resetTokenExpiration: {$gt: Date.now()}})
         .then(user => {
+            if (!user){
+                req.flash('error', 'Password was reset or time for resetting expired!');
+                return res.redirect('/login');
+            }
             let message = req.flash('error');
             if (message.length > 0) {
                 message = message[0];
@@ -194,8 +198,29 @@ exports.getNewPassword = (req, res, next) => {
                 docTitle: 'New Password',
                 path: '/new-password',
                 errorMessage: message,
-                userId: user._id.toString()
+                userId: user._id.toString(),
+                passwordToken: token
             })
         })
         .catch(err => console.log(err));
+}
+
+exports.postNewPassword = (req, res, next) => {
+    const newPassword = req.body.password;
+    const userId = req.body.userId;
+    const passwordToken = req.body.passwordToken;
+
+    User.findOne({resetToken: passwordToken, resetTokenExpiration: {$gt: Date.now()}, _id: userId})
+        .then(user => {
+            return bcrypt.hash(newPassword, 12).then(hashedPassword => {
+                user.password = hashedPassword;
+                user.resetToken = null;
+                user.resetTokenExpiration = undefined;
+                return user.save();
+            })
+        })
+        .then(result => {
+            return res.redirect('/login');
+        })
+        .catch(err => console.log(err))
 }
