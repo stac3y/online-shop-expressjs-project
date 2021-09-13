@@ -20,7 +20,10 @@ router.post('/signup',
                 throw new Error('This email address is forbidden!');
             }
             return true;
-        })
+        }),
+        body('password', 'Please enter a password with only numbers and text and at least 6 characters.')
+            .isLength({min: 6})
+            .isAlphanumeric()
     ],
     authController.postSignup
 )
