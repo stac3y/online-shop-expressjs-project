@@ -89,49 +89,37 @@ exports.getSignup = (req, res, next) => {
 exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    const confirmPassword = req.body.confirmPassword;
     const errors = validationResult(req);
 
-    if (!errors.isEmpty()){
+    if (!errors.isEmpty()) {
         return res.status(422).render('auth/signup', {
             docTitle: 'Signup',
             path: '/signup',
             errorMessage: errors.array()[0].msg
         });
     }
-    User
-        .findOne({email: email})
-        .then(userDoc => {
-            if (userDoc) {
-                req.flash('error', 'E-mail exists already, please pick a different one!');
-                return res.redirect('/signup');
-            }
-            return bcrypt.hash(password, 12).then(hashedPassword => {
-                const user = new User({
-                    email: email,
-                    password: hashedPassword,
-                    cart: {items: []}
-                });
-                return user.save();
-            })
-                .then(result => {
-                    req.flash('success', 'Sign up successfully!');
-                    res.redirect('/login');
-                    return transporter.sendMail({
-                        to: email,
-                        from: 'shop@node-complete.com',
-                        subject: 'Signup succeed!',
-                        html: '<h1>You successfully signed up!</h1>'
-                    });
-                })
-                .then(result => {
-                    console.log(result);
-                })
-                .catch(err => console.log(err));
+    bcrypt.hash(password, 12).then(hashedPassword => {
+        const user = new User({
+            email: email,
+            password: hashedPassword,
+            cart: {items: []}
+        });
+        return user.save();
+    })
+        .then(result => {
+            req.flash('success', 'Sign up successfully!');
+            res.redirect('/login');
+            return transporter.sendMail({
+                to: email,
+                from: 'shop@node-complete.com',
+                subject: 'Signup succeed!',
+                html: '<h1>You successfully signed up!</h1>'
+            });
         })
-
+        .then(result => {
+            console.log(result);
+        })
         .catch(err => console.log(err));
-
 }
 
 exports.postLogout = (req, res, next) => {
@@ -192,7 +180,7 @@ exports.getNewPassword = (req, res, next) => {
     const token = req.params.token;
     User.findOne({resetToken: token, resetTokenExpiration: {$gt: Date.now()}})
         .then(user => {
-            if (!user){
+            if (!user) {
                 req.flash('error', 'Password was reset or time for resetting expired!');
                 return res.redirect('/login');
             }
