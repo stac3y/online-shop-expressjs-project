@@ -9,7 +9,7 @@
     <% if (successMessage) { %>
         <div class="user-message"><%= successMessage %></div>
     <% } %>
-    <form class="login-form" action="/login" method="post">
+    <form class="login-form" action="/login" method="post" novalidate>
         <div class="form-control">
             <label for="email">E-Mail</label>
             <input type="text" name="email" id="email">

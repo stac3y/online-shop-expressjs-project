@@ -8,7 +8,15 @@ const router = express.Router();
 
 router.get('/login', authController.getLogin);
 
-router.post('/login', authController.postLogin);
+router.post('/login',
+    [body('email')
+        .isEmail()
+        .withMessage('Please enter a valid e-mail!'),
+        body('password', 'Please enter a password with only numbers and text and at least 6 characters.')
+            .isLength({min: 6})
+            .isAlphanumeric()
+    ],
+    authController.postLogin);
 
 router.get('/signup', authController.getSignup);
 
@@ -21,7 +29,7 @@ router.post('/signup',
                 .findOne({email: value})
                 .then(userDoc => {
                     if (userDoc) {
-                        Promise.reject('E-mail exists already, please pick a different one!');
+                        Promise.reject('E-mail exists already, please pick a different one!').catch(err => console.log(err));
                     }
                 })
         }),
