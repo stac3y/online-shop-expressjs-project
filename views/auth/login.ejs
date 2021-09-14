@@ -3,20 +3,24 @@
 <link rel="stylesheet" href="/css/auth.css">
 <%- include('../includes/navigation.ejs') %>
 <main>
-    <% if (errorMessage) { %>
-        <div class="user-message user-message__error"><%= errorMessage %></div>
-    <% } %>
+    <% if(errorMessages){ errorMessages.forEach(errorMessage  => { %>
+        <div class="user-message user-message__error"><%= errorMessage.msg %></div>
+    <% })} %>
     <% if (successMessage) { %>
         <div class="user-message"><%= successMessage %></div>
     <% } %>
     <form class="login-form" action="/login" method="post" novalidate>
         <div class="form-control">
             <label for="email">E-Mail</label>
-            <input type="text" name="email" id="email" value="<%= oldInput.email%>">
+            <input
+                    class="<%= validationErrors.find((e) => e.param === 'email') ? 'invalid' : '' %>"
+                    type="text" name="email" id="email" value="<%= oldInput.email %>">
         </div>
         <div class="form-control">
             <label for="password">Password</label>
-            <input type="password" name="password" id="password" value="<%= oldInput.password%>">
+            <input
+                    class="<%= validationErrors.find((e) => e.param === 'password') ? 'invalid' : '' %>"
+                    type="password" name="password" id="password" value="<%= oldInput.password %>">
         </div>
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <button class="btn" type="submit">Login</button>

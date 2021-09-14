@@ -17,11 +17,9 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.getLogin = (req, res, next) => {
-    let message = req.flash('error');
-    if (message.length > 0) {
-        message = message[0];
-    } else {
-        message = null;
+    let messages = req.flash('error');
+    if (messages.length <= 0) {
+        messages = null;
     }
     let successMessage = req.flash('success');
 
@@ -34,9 +32,10 @@ exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
         docTitle: 'Login',
         path: '/login',
-        errorMessage: message,
+        errorMessages: messages,
         successMessage: successMessage,
-        oldInput: {email: "", password: ""}
+        oldInput: {email: "", password: ""},
+        validationErrors: []
     })
 }
 
@@ -49,22 +48,35 @@ exports.postLogin = (req, res, next) => {
         return res.status(422).render('auth/login', {
             docTitle: 'Login',
             path: '/login',
-            errorMessage: errors.array()[0].msg,
+            errorMessages: errors.array(),
             successMessage: null,
-            oldInput: {email: email, password: password}
+            oldInput: {email: email, password: password},
+            validationErrors: errors.array()
         });
     }
     User.findOne({email: email})
         .then(user => {
             if (!user) {
-                req.flash('error', 'Invalid email!');
-                return res.redirect('/login');
+                return res.status(422).render('auth/login', {
+                    docTitle: 'Login',
+                    path: '/login',
+                    errorMessages: [{msg:'Invalid email!'}],
+                    successMessage: null,
+                    oldInput: {email: email, password: password},
+                    validationErrors: [{param: 'email'}]
+                });
             }
             bcrypt.compare(password, user.password)
                 .then(isCompare => {
                     if (!isCompare) {
-                        req.flash('error', 'Invalid password!');
-                        return res.redirect('/login');
+                        return res.status(422).render('auth/login', {
+                            docTitle: 'Login',
+                            path: '/login',
+                            errorMessages: [{msg:'Invalid password!'}],
+                            successMessage: null,
+                            oldInput: {email: email, password: password},
+                            validationErrors: [{param: 'password'}]
+                        });
                     }
                     req.session.user = user;
                     req.session.isLoggedIn = true;
