@@ -3,9 +3,9 @@
 <link rel="stylesheet" href="/css/auth.css">
 <%- include('../includes/navigation.ejs') %>
 <main>
-    <% errorMessages.forEach(errorMessage  => { %>
+    <% if(errorMessages){ errorMessages.forEach(errorMessage  => { %>
         <div class="user-message user-message__error"><%= errorMessage.msg %></div>
-    <% }) %>
+    <% })} %>
     <form class="login-form" action="/signup" method="POST" novalidate>
         <div class="form-control">
             <label for="email">E-Mail</label>
