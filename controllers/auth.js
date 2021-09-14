@@ -84,18 +84,17 @@ exports.postLogin = (req, res, next) => {
 }
 
 exports.getSignup = (req, res, next) => {
-    let errorMessage = req.flash('error');
-    if (errorMessage.length > 0) {
-        errorMessage = errorMessage[0];
-    } else {
-        errorMessage = null;
+    let errorMessages = req.flash('error');
+    if (!errorMessages.length <= 0) {
+        errorMessages = null;
     }
 
     res.render('auth/signup', {
         docTitle: 'Signup',
         path: '/signup',
-        errorMessage: errorMessage,
-        oldInput: {email: "", password: "", confirmPassword: ""}
+        errorMessages: errorMessages,
+        oldInput: {email: "", password: "", confirmPassword: ""},
+        validationErrors: []
     })
 }
 
@@ -109,8 +108,9 @@ exports.postSignup = (req, res, next) => {
         return res.status(422).render('auth/signup', {
             docTitle: 'Signup',
             path: '/signup',
-            errorMessage: errors.array()[0].msg,
-            oldInput: {email: email, password: password, confirmPassword: confirmPassword}
+            errorMessages: errors.array(),
+            oldInput: {email: email, password: password, confirmPassword: confirmPassword},
+            validationErrors: errors.array()
         });
     }
     bcrypt.hash(password, 12).then(hashedPassword => {

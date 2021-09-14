@@ -25,6 +25,11 @@
 .form-control textarea:focus{
     outline-color: crimson;
 }
+
+.form-control input.invalid {
+    border-color: crimson;
+    border-width: revert;
+}
 button{
     font: inherit;
     border: 1px solid #f304bf;

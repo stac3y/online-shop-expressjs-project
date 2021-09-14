@@ -234,7 +234,7 @@ form {
 }
 
 .user-message{
-    margin: auto;
+    margin: 5px auto;
     width: 90%;
     border: 1px solid cornflowerblue;
     padding: 0.5rem;
