@@ -10,21 +10,21 @@ router.get('/add-product', isAuth, adminController.getAddProduct);
 
 router.post('/add-product',
     [body('title')
+        .trim()
         .isString()
-        .withMessage('Invalid title!')
-        .trim(),
+        .withMessage('Invalid title!'),
         body('imageUrl')
+            .trim()
             .isURL()
-            .withMessage('Invalid image URL!')
-            .trim(),
+            .withMessage('Invalid image URL!'),
         body('price')
             .isFloat()
             .withMessage('Invalid price!')
             .trim(),
         body('description')
+            .trim()
             .isLength({min: 5})
             .withMessage('The description must be at least 5 characters!')
-            .trim()
     ],
     isAuth,
     adminController.postAddProduct);
@@ -35,21 +35,21 @@ router.get('/edit-product/:productId', isAuth, adminController.getEditProduct);
 
 router.post('/edit-product',
     [body('title')
-        .isAlphanumeric()
-        .withMessage('Invalid title!')
-        .trim(),
+        .trim()
+        .isString()
+        .withMessage('Invalid title!'),
         body('imageUrl')
+            .trim()
             .isURL()
-            .withMessage('Invalid image URL!')
-            .trim(),
+            .withMessage('Invalid image URL!'),
         body('price')
             .isFloat()
             .withMessage('Invalid price!')
             .trim(),
         body('description')
+            .trim()
             .isLength({min: 5})
             .withMessage('The description must be at least 5 characters!')
-            .trim()
     ],
     isAuth, adminController.postEditProduct);
 

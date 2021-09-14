@@ -6,7 +6,7 @@
     <% if(errorMessages){ errorMessages.forEach(errorMessage  => { %>
         <div class="user-message user-message__error"><%= errorMessage.msg %></div>
     <% })} %>
-    <form class="product-form" action="/admin/<% if (editing || hasError) { %>edit-product<% } else{ %>add-product<% } %>"
+    <form class="product-form" action="/admin/<% if (editing) { %>edit-product<% } else{ %>add-product<% } %>"
           method="post" novalidate>
         <div class="form-control">
             <label for="title">Title</label>

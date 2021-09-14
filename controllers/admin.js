@@ -63,11 +63,13 @@ exports.getEditProduct = (req, res, next) => {
                 return res.redirect('/');
             }
             res.render('admin/edit-product', {
-                docTitle: 'Add product',
+                docTitle: 'Edit product',
                 path: '/admin/edit-product',
                 editing: editMode,
                 hasError: false,
-                product: product
+                product: product,
+                errorMessages: [],
+                validationErrors: [],
             });
         })
         .catch(err => console.log(err))
@@ -80,6 +82,26 @@ exports.postEditProduct = (req, res, next) => {
     const updatedImageUrl = req.body.imageUrl;
     const updatedDescription = req.body.description;
     const updatedPrice = req.body.price;
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(422).render('admin/edit-product', {
+            docTitle: 'Edit product',
+            path: '/admin/edit-product',
+            editing: true,
+            hasError: true,
+            errorMessages: errors.array(),
+            product: {
+                title: updatedTitle,
+                imageUrl: updatedImageUrl,
+                price: updatedPrice,
+                description: updatedDescription,
+                _id: productId
+            },
+            validationErrors: errors.array()
+        });
+    }
 
     Product.findById(productId)
         .then(product => {

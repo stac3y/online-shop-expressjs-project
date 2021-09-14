@@ -26,7 +26,8 @@
     outline-color: crimson;
 }
 
-.form-control input.invalid {
+.form-control input.invalid,
+.form-control textarea.invalid {
     border-color: crimson;
     border-width: revert;
 }
