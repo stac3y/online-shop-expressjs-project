@@ -29,7 +29,7 @@ router.post('/signup',
                 .findOne({email: value})
                 .then(userDoc => {
                     if (userDoc) {
-                        Promise.reject('E-mail exists already, please pick a different one!').catch(err => console.log(err));
+                       return  Promise.reject('E-mail exists already, please pick a different one!')
                     }
                 })
         }),

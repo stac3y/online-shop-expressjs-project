@@ -35,7 +35,8 @@ exports.getLogin = (req, res, next) => {
         docTitle: 'Login',
         path: '/login',
         errorMessage: message,
-        successMessage: successMessage
+        successMessage: successMessage,
+        oldInput: {email: "", password: ""}
     })
 }
 
@@ -49,7 +50,8 @@ exports.postLogin = (req, res, next) => {
             docTitle: 'Login',
             path: '/login',
             errorMessage: errors.array()[0].msg,
-            successMessage: null
+            successMessage: null,
+            oldInput: {email: email, password: password}
         });
     }
     User.findOne({email: email})
@@ -92,20 +94,23 @@ exports.getSignup = (req, res, next) => {
     res.render('auth/signup', {
         docTitle: 'Signup',
         path: '/signup',
-        errorMessage: errorMessage
+        errorMessage: errorMessage,
+        oldInput: {email: "", password: "", confirmPassword: ""}
     })
 }
 
 exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
         return res.status(422).render('auth/signup', {
             docTitle: 'Signup',
             path: '/signup',
-            errorMessage: errors.array()[0].msg
+            errorMessage: errors.array()[0].msg,
+            oldInput: {email: email, password: password, confirmPassword: confirmPassword}
         });
     }
     bcrypt.hash(password, 12).then(hashedPassword => {
