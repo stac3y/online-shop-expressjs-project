@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const Product = require('../models/product');
 
-exports.postAddProduct = (req, res) => {
+exports.postAddProduct = (req, res, next) => {
     const _id = mongoose.Types.ObjectId('612e3aeb57f3bd48e8eae0fb');
 
     const title = req.body.title;
@@ -47,11 +47,13 @@ exports.postAddProduct = (req, res) => {
             //     product: {title: title, imageUrl: imageUrl, price: price, description: description},
             //     validationErrors: []
             // });
-            res.redirect('/500');
+            const error= new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
 }
 
-exports.getAddProduct = (req, res) => {
+exports.getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', {
         docTitle: 'Add product',
         path: '/admin/add-product',
@@ -86,7 +88,11 @@ exports.getEditProduct = (req, res, next) => {
                 validationErrors: [],
             });
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            const error= new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
 }
 
 exports.postEditProduct = (req, res, next) => {
@@ -134,7 +140,9 @@ exports.postEditProduct = (req, res, next) => {
                 })
         })
         .catch(err => {
-            console.log(err);
+            const error= new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
 }
 
@@ -150,7 +158,9 @@ exports.getProducts = (req, res, next) => {
             }
         )
         .catch(err => {
-            console.log(err);
+            const error= new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
 }
 
@@ -163,6 +173,8 @@ exports.postDeleteProduct = (req, res, next) => {
             res.redirect('/admin/products');
         })
         .catch(err => {
-            console.log(err);
+            const error= new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
 }
