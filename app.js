@@ -67,8 +67,9 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
+app.use('/500', errorController.getError500);
 
-app.use(errorController.getError);
+app.use(errorController.getError404);
 
 mongoose.connect(MONGODB_URI)
     .then(result => {
