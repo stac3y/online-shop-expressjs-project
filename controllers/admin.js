@@ -5,10 +5,12 @@ const Product = require('../models/product');
 
 exports.postAddProduct = (req, res, next) => {
     const title = req.body.title;
-    const image = req.body.image;
+    const image = req.file;
     const description = req.body.description;
     const price = req.body.price;
     const errors = validationResult(req);
+
+    console.log(image);
 
     if (!errors.isEmpty()) {
         return res.status(422).render('admin/edit-product', {
