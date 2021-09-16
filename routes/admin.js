@@ -13,10 +13,6 @@ router.post('/add-product',
         .trim()
         .isString()
         .withMessage('Invalid title!'),
-        body('imageUrl')
-            .trim()
-            .isURL()
-            .withMessage('Invalid image URL!'),
         body('price')
             .isFloat()
             .withMessage('Invalid price!')
@@ -38,10 +34,6 @@ router.post('/edit-product',
         .trim()
         .isString()
         .withMessage('Invalid title!'),
-        body('imageUrl')
-            .trim()
-            .isURL()
-            .withMessage('Invalid image URL!'),
         body('price')
             .isFloat()
             .withMessage('Invalid price!')

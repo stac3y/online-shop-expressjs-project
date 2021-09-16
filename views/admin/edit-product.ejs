@@ -7,7 +7,7 @@
         <div class="user-message user-message__error"><%= errorMessage.msg %></div>
     <% })} %>
     <form class="product-form" action="/admin/<% if (editing) { %>edit-product<% } else{ %>add-product<% } %>"
-          method="post" novalidate>
+          method="post" novalidate enctype="multipart/form-data">
         <div class="form-control">
             <label for="title">Title</label>
             <input
@@ -36,10 +36,7 @@
         <div class="form-control">
             <label for="description">Description</label>
             <textarea class="<%= validationErrors.find((e) => e.param === 'description') ? 'invalid' : '' %>"
-                      name="description" id="description" rows="5">
-                <% if (editing || hasError) { %><%= product.description %>
-                <% } %>
-            </textarea>
+                      name="description" id="description" rows="5"><% if (editing || hasError) { %><%= product.description %><% } %></textarea>
         </div>
         <% if (editing) { %>
             <input type="hidden" value="<%= product._id %>" name="productId">

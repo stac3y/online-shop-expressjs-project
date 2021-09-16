@@ -5,7 +5,7 @@ const Product = require('../models/product');
 
 exports.postAddProduct = (req, res, next) => {
     const title = req.body.title;
-    const imageUrl = req.body.imageUrl;
+    const image = req.body.image;
     const description = req.body.description;
     const price = req.body.price;
     const errors = validationResult(req);
@@ -17,13 +17,12 @@ exports.postAddProduct = (req, res, next) => {
             editing: false,
             hasError: true,
             errorMessages: errors.array(),
-            product: {title: title, imageUrl: imageUrl, price: price, description: description},
+            product: {title: title, imageUrl: image, price: price, description: description},
             validationErrors: errors.array()
         });
     }
 
     const product = new Product({
-        _id: _id,
         title: title,
         imageUrl: imageUrl,
         description: description,
