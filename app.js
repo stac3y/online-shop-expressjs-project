@@ -41,10 +41,17 @@ app.use(session({secret: 'my secret', resave: false, saveUninitialized: false, s
 app.use(csrfProtection);
 app.use(flash());
 
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
+
 app.use((req, res, next) =>{
     if (!req.session.user){
         return next();
     }
+
     User.findById(req.session.user._id)
         .then(user => {
             if (!user){
@@ -54,17 +61,11 @@ app.use((req, res, next) =>{
             next();
         })
         .catch(err => {
-            const error= new Error(err);
-            error.httpStatusCode = 500;
-            return next(error);
+            // throw new Error(err);
+            // error.httpStatusCode = 500;
+            return next(new Error(err));
         });
 });
-
-app.use((req, res, next) => {
-    res.locals.isAuthenticated = req.session.isLoggedIn;
-    res.locals.csrfToken = req.csrfToken();
-    next();
-})
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -74,7 +75,7 @@ app.use('/500', errorController.getError500);
 app.use(errorController.getError404);
 
 app.use((error, req, res, next) => {
-    res.redirect('/500');
+    res.status(500).render('error-500', {docTitle: 'Error', path: '/500'});
 })
 
 mongoose.connect(MONGODB_URI)

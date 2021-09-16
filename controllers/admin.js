@@ -4,8 +4,6 @@ const mongoose = require('mongoose');
 const Product = require('../models/product');
 
 exports.postAddProduct = (req, res, next) => {
-    const _id = mongoose.Types.ObjectId('612e3aeb57f3bd48e8eae0fb');
-
     const title = req.body.title;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
@@ -38,15 +36,6 @@ exports.postAddProduct = (req, res, next) => {
             res.redirect('/admin/products');
         })
         .catch(err => {
-            // return res.status(500).render('admin/edit-product', {
-            //     docTitle: 'Add product',
-            //     path: '/admin/add-product',
-            //     editing: false,
-            //     hasError: true,
-            //     errorMessages: [{msg:'Database operation failed, please try again!'}],
-            //     product: {title: title, imageUrl: imageUrl, price: price, description: description},
-            //     validationErrors: []
-            // });
             const error= new Error(err);
             error.httpStatusCode = 500;
             return next(error);
