@@ -27,7 +27,7 @@ const store = new MongoDBStore({
 });
 
 // Catch errors
-store.on('error', function(error) {
+store.on('error', function (error) {
     console.log(error);
 });
 
@@ -42,11 +42,19 @@ const fileStorage = multer.diskStorage({
     }
 });
 
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+}
+
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(multer({storage: fileStorage}).single('image'));
+app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single('image'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret: 'my secret', resave: false, saveUninitialized: false, store: store}));
 app.use(csrfProtection);
@@ -58,14 +66,14 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use((req, res, next) =>{
-    if (!req.session.user){
+app.use((req, res, next) => {
+    if (!req.session.user) {
         return next();
     }
 
     User.findById(req.session.user._id)
         .then(user => {
-            if (!user){
+            if (!user) {
                 return next();
             }
             req.user = user;
@@ -94,7 +102,7 @@ mongoose.connect(MONGODB_URI)
         app.listen(3000);
     })
     .catch(err => {
-        const error= new Error(err);
+        const error = new Error(err);
         error.httpStatusCode = 500;
         return next(error);
     });
