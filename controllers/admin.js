@@ -10,7 +10,17 @@ exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const errors = validationResult(req);
 
-    console.log(image);
+    if (!image) {
+        return res.status(422).render('admin/edit-product', {
+            docTitle: 'Add product',
+            path: '/admin/add-product',
+            editing: false,
+            hasError: true,
+            errorMessages: [{msg: 'Attached file is not an image'}],
+            product: {title: title, price: price, description: description},
+            validationErrors: []
+        });
+    }
 
     if (!errors.isEmpty()) {
         return res.status(422).render('admin/edit-product', {
@@ -19,10 +29,13 @@ exports.postAddProduct = (req, res, next) => {
             editing: false,
             hasError: true,
             errorMessages: errors.array(),
-            product: {title: title, imageUrl: image, price: price, description: description},
+            product: {title: title, price: price, description: description},
             validationErrors: errors.array()
         });
     }
+
+    const imageUrl = image.path;
+    console.log(imageUrl)
 
     const product = new Product({
         title: title,
@@ -37,7 +50,7 @@ exports.postAddProduct = (req, res, next) => {
             res.redirect('/admin/products');
         })
         .catch(err => {
-            const error= new Error(err);
+            const error = new Error(err);
             error.httpStatusCode = 500;
             return next(error);
         });
@@ -79,7 +92,7 @@ exports.getEditProduct = (req, res, next) => {
             });
         })
         .catch(err => {
-            const error= new Error(err);
+            const error = new Error(err);
             error.httpStatusCode = 500;
             return next(error);
         })
@@ -89,7 +102,7 @@ exports.postEditProduct = (req, res, next) => {
     const productId = req.body.productId;
 
     const updatedTitle = req.body.title;
-    const updatedImageUrl = req.body.imageUrl;
+    const image = req.file;
     const updatedDescription = req.body.description;
     const updatedPrice = req.body.price;
 
@@ -104,7 +117,6 @@ exports.postEditProduct = (req, res, next) => {
             errorMessages: errors.array(),
             product: {
                 title: updatedTitle,
-                imageUrl: updatedImageUrl,
                 price: updatedPrice,
                 description: updatedDescription,
                 _id: productId
@@ -119,7 +131,9 @@ exports.postEditProduct = (req, res, next) => {
                 return res.redirect('/');
             }
             product.title = updatedTitle;
-            product.imageUrl = updatedImageUrl;
+            if (image) {
+                product.imageUrl = image.path;
+            }
             product.description = updatedDescription;
             product.price = updatedPrice;
 
@@ -130,7 +144,7 @@ exports.postEditProduct = (req, res, next) => {
                 })
         })
         .catch(err => {
-            const error= new Error(err);
+            const error = new Error(err);
             error.httpStatusCode = 500;
             return next(error);
         });
@@ -148,7 +162,7 @@ exports.getProducts = (req, res, next) => {
             }
         )
         .catch(err => {
-            const error= new Error(err);
+            const error = new Error(err);
             error.httpStatusCode = 500;
             return next(error);
         });
@@ -163,7 +177,7 @@ exports.postDeleteProduct = (req, res, next) => {
             res.redirect('/admin/products');
         })
         .catch(err => {
-            const error= new Error(err);
+            const error = new Error(err);
             error.httpStatusCode = 500;
             return next(error);
         });
