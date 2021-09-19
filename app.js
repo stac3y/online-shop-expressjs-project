@@ -82,7 +82,7 @@ app.use((req, res, next) => {
         .catch(err => {
             // throw new Error(err);
             // error.httpStatusCode = 500;
-            return next(new Error(err));
+            next(new Error(err));
         });
 });
 
@@ -94,7 +94,13 @@ app.use('/500', errorController.getError500);
 app.use(errorController.getError404);
 
 app.use((error, req, res, next) => {
-    res.status(500).render('error-500', {docTitle: 'Error', path: '/500'});
+    res.redirect('/500');
+    // res.status(500).render('error-500',
+    //     {
+    //         docTitle: 'Error',
+    //         path: '/500',
+    //         isAuthenticated: req.session.isLoggedIn
+    //     });
 })
 
 mongoose.connect(MONGODB_URI)
