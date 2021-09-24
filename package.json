@@ -22,7 +22,8 @@
     "mongoose": "^6.0.2",
     "nodemailer": "^6.6.3",
     "nodemailer-sendgrid-transport": "^0.2.0",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "stripe": "^8.176.0"
   },
   "devDependencies": {
     "connect-flash": "^0.1.1",
